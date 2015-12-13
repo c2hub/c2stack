@@ -1,0 +1,82 @@
+module c2stack;
+
+import stdlib local;
+import stdio local;
+import string local;
+
+//Implementation of a stack in C2
+public type stack struct
+{
+    void** items;
+    int32 capacity;
+    int32 total;
+}
+
+public func void init(stack* s)
+{
+    s.capacity = 4;
+    s.total = 0;
+    s.items = malloc(sizeof(void *) * s.capacity);
+}
+
+public func int32 total(stack* s)
+{
+    return s.total;
+}
+
+func void resize(stack* s, int32 capacity)
+{
+    void** items = realloc(s.items, sizeof(void *) * capacity);
+    if (items != nil)
+    {
+        s.items = items;
+        s.capacity = capacity;
+    }
+}
+
+public func void push(stack* s, void* item)
+{
+    if (s.capacity == s.total)
+        resize(s, s.capacity * 2);
+    s.items[s.total++] = item;
+    printf("%d %s\n", s.total, item);
+}
+
+public func void* pop(stack* s)
+{
+    int32 index = total(s) - 1;
+    if (index >= 0 && index < s.total)
+    {
+
+        void* src = s.items[index];
+        void* dest = malloc(sizeof(src));
+        memcpy(&dest, &src, sizeof(src));
+        delete(s, index);
+        return dest;
+    }
+    return nil;
+}
+
+func void delete(stack* s, int32 index)
+{
+    if (index < 0 || index >= s.total)
+        return;
+
+    s.items[index] = nil;
+
+    for (int32 i = index; i < s.total - 1; i++)
+    {
+        s.items[i] = s.items[i + 1];
+        s.items[i + 1] = nil;
+    }
+
+    s.total--;
+
+    if (s.total > 0 && s.total == s.capacity / 4)
+        resize(s, s.capacity / 2);
+}
+
+public func void free(stack *s)
+{
+    stdlib.free(s.items);
+}
