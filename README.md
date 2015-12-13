@@ -1,6 +1,23 @@
 # c2stack
 Stack implementation in C2. Stack is an data structure which follows
 the LIFO model (Last In, First Out).
+After downloading or cloning c2vector, it is advised to test
+it with
+```
+c2c --test --checkOnly
+```
+in the the root directory of the c2vector repository
+
+You can then try an example of usage of vector with
+```
+c2c
+```
+and running the test executable
+```
+./output/test/test
+```
+If no errors are thrown during the testing, everything works and you are good
+to go.
 ## API
 ```
 public type stack struct
