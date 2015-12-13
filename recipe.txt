@@ -1,0 +1,6 @@
+target test
+	$warnings no-unused
+	$generate-c
+	c2stack/c2stack.c2
+	tester.c2
+end
