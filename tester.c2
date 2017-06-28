@@ -1,23 +1,25 @@
 module tester;
 
 import stdio as io;
-import c2stack as stck local;
-
-stack test;
+import c2stack local;
 
 public func int32 main()
 {
-	stck.init(&test);
-	stck.push(&test,"Wordlings!");
-	stck.push(&test,", ");
-	stck.push(&test,"Hello");
-	
-	int32 i = total(&test);
+	Stack test;
+
+	test.init();
+	test.push("Wordlings!");
+	test.push(", ");
+	test.push("Hello");
+
+	int32 i = test.total();
 	io.printf("total: %d\n", i);
+
 	while(i --> 0)
 	{
-		io.printf("%s", pop(&test));
+		io.printf("%s", test.pop());
 	}
+
 	io.puts("\n");
 	return 0;
 }

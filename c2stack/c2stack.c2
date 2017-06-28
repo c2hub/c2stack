@@ -5,26 +5,26 @@ import stdio local;
 import string local;
 
 //Implementation of a stack in C2
-public type stack struct
+public type Stack struct
 {
     void** items;
-    int32 capacity;
-    int32 total;
+    uint32 capacity;
+    int32 total_;
 }
 
-public func void init(stack* s)
+public func void Stack.init(Stack* s)
 {
     s.capacity = 4;
-    s.total = 0;
+    s.total_ = 0;
     s.items = malloc(sizeof(void *) * s.capacity);
 }
 
-public func int32 total(stack* s)
+public func int32 Stack.total(Stack* s)
 {
-    return s.total;
+    return s.total_;
 }
 
-func void resize(stack* s, int32 capacity)
+func void resize(Stack* s, uint32 capacity)
 {
     void** items = realloc(s.items, sizeof(void *) * capacity);
     if (items != nil)
@@ -34,49 +34,49 @@ func void resize(stack* s, int32 capacity)
     }
 }
 
-public func void push(stack* s, void* item)
+public func void Stack.push(Stack* s, void* item)
 {
-    if (s.capacity == s.total)
+    if (s.capacity == s.total_)
         resize(s, s.capacity * 2);
-    s.items[s.total++] = item;
-    printf("%d %s\n", s.total, item);
+    s.items[s.total_++] = item;
+    printf("%d %s\n", s.total_, item);
 }
 
-public func void* pop(stack* s)
+public func void* Stack.pop(Stack* s)
 {
-    int32 index = total(s) - 1;
-    if (index >= 0 && index < s.total)
+    int32 index = s.total() - 1;
+    if (index >= 0 && index < s.total_)
     {
 
         void* src = s.items[index];
         void* dest = malloc(sizeof(src));
         memcpy(&dest, &src, sizeof(src));
-        delete(s, index);
+        s.delete(index);
         return dest;
     }
     return nil;
 }
 
-func void delete(stack* s, int32 index)
+public func void Stack.delete(Stack* s, int32 index)
 {
-    if (index < 0 || index >= s.total)
+    if (index < 0 || index >= s.total_)
         return;
 
     s.items[index] = nil;
 
-    for (int32 i = index; i < s.total - 1; i++)
+    for (int32 i = index; i < s.total_ - 1; i++)
     {
         s.items[i] = s.items[i + 1];
         s.items[i + 1] = nil;
     }
 
-    s.total--;
+    s.total_--;
 
-    if (s.total > 0 && s.total == s.capacity / 4)
+    if (s.total_ > 0 && s.total_ == s.capacity / 4)
         resize(s, s.capacity / 2);
 }
 
-public func void free(stack *s)
+public func void Stack.free(Stack *s)
 {
     stdlib.free(s.items);
 }
